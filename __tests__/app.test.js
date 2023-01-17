@@ -52,7 +52,7 @@ describe("app", () => {
             })
         })
         })
-    describe.only("GET/api/reviews", () => {
+    describe("GET/api/reviews", () => {
 	    test("200 status code: request has been succeeded", () => {
 		    return request(app)
 		    .get("/api/reviews")
@@ -65,6 +65,24 @@ describe("app", () => {
             .then((result) => {
                 const reviews = result.body
                 expect(reviews).toBeInstanceOf(Array)
+            })
+        })
+        test("200 status code: confirmation that the array includes objects", () => {
+            return request(app)
+            .get("/api/reviews")
+            .expect(200)
+            .then((result) => {
+                const reviews = result.body
+                expect(reviews).toEqual(expect.arrayContaining([expect.objectContaining({})]))
+            })
+        })
+        test("200 status code: arry returned shoud have the coreect length", () => {
+            return request(app)
+            .get("/api/reviews")
+            .expect(200)
+            .then((result) => {
+                const allReviews = result.body
+                expect(allReviews).toHaveLength(13)
             })
         })
         test("200 status code: array of objects created with correct keys", () => {
