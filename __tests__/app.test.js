@@ -52,7 +52,7 @@ describe("app", () => {
             })
         })
         })
-    describe("GET/api/reviews", () => {
+    describe.only("GET/api/reviews", () => {
 	    test("200 status code: request has been succeeded", () => {
 		    return request(app)
 		    .get("/api/reviews")
@@ -92,15 +92,17 @@ describe("app", () => {
             .then((result) => {
                 const reviewsResult = result.body
                 reviewsResult.forEach((review) => {
-                    expect(review).toHaveProperty('owner', expect.any(String)); 
-                    expect(review).toHaveProperty('title', expect.any(String)); 
-                    expect(review).toHaveProperty('designer', expect.any(String)); 
-                    expect(review).toHaveProperty('review_id', expect.any(Number)); 
-                    expect(review).toHaveProperty('category', expect.any(String)); 
-                    expect(review).toHaveProperty('review_img_url', expect.any(String)); 
-                    expect(review).toHaveProperty('created_at', expect.any(String)); 
-                    expect(review).toHaveProperty('votes', expect.any(Number)); 
-                    expect(review).toHaveProperty('comment_count'); 
+                    expect(review).toEqual(expect.objectContaining({
+                        owner: expect.any(String),
+                        title: expect.any(String),
+                        designer: expect.any(String),
+                        review_id: expect.any(Number),
+                        category: expect.any(String),
+                        review_img_url: expect.any(String),
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        comment_count: expect.any(String)
+                    }));
                 })
             })
         })
@@ -123,7 +125,7 @@ describe("app", () => {
             })
         })
         })
-    describe.only("GET/api/reviews/:review_id", () => {
+    describe("GET/api/reviews/:review_id", () => {
         test("200 status code: request has been succeeded", () => {
             return request(app)
             .get("/api/reviews/3")
@@ -154,15 +156,18 @@ describe("app", () => {
             .expect(200)
             .then((result) => {
                 reviewObj = result.body
-                expect(reviewObj).toHaveProperty("review_id")
-                expect(reviewObj).toHaveProperty("title")
-                expect(reviewObj).toHaveProperty("review_body")
-                expect(reviewObj).toHaveProperty("designer")
-                expect(reviewObj).toHaveProperty("review_img_url")
-                expect(reviewObj).toHaveProperty("votes")
-                expect(reviewObj).toHaveProperty("category")
-                expect(reviewObj).toHaveProperty("owner")
-                expect(reviewObj).toHaveProperty("created_at")
+                expect(reviewObj).toEqual({
+                    review_id: 1,
+                    title: 'Agricola',
+                    designer: 'Uwe Rosenberg',
+                    owner: 'mallionaire',
+                    review_img_url:
+                      'https://images.pexels.com/photos/974314/pexels-photo-974314.jpeg?w=700&h=700',
+                    review_body: 'Farmyard fun!',
+                    category: 'euro game',
+                    created_at: '2021-01-18T10:00:20.514Z',
+                    votes: 1
+                  })
             })
             })
         test("404 status code: responds with 'review not found' if given a non-existant review_id", () => {
