@@ -123,6 +123,14 @@ describe("app", () => {
             })
         })
         })
-
+    // describe.only("GET/api/reviews/:review_id", () => {
+    //     test("200 status code: request has been succeeded", () => {
+    //         return request(app)
+    //         .get("/api/reviews/:review_id")
+    //         .expect(200)
+    //     })        
+    // })
     });
 
+
+    
