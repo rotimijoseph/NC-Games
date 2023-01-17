@@ -67,6 +67,24 @@ describe("app", () => {
                 expect(reviews).toBeInstanceOf(Array)
             })
         })
+        test("200 status code: confirmation that the array includes objects", () => {
+            return request(app)
+            .get("/api/reviews")
+            .expect(200)
+            .then((result) => {
+                const reviews = result.body
+                expect(reviews).toEqual(expect.arrayContaining([expect.objectContaining({})]))
+            })
+        })
+        test("200 status code: arry returned shoud have the coreect length", () => {
+            return request(app)
+            .get("/api/reviews")
+            .expect(200)
+            .then((result) => {
+                const allReviews = result.body
+                expect(allReviews).toHaveLength(13)
+            })
+        })
         test("200 status code: array of objects created with correct keys", () => {
             return request(app)
             .get("/api/reviews")
@@ -74,15 +92,17 @@ describe("app", () => {
             .then((result) => {
                 const reviewsResult = result.body
                 reviewsResult.forEach((review) => {
-                    expect(review).toHaveProperty('owner', expect.any(String)); 
-                    expect(review).toHaveProperty('title', expect.any(String)); 
-                    expect(review).toHaveProperty('designer', expect.any(String)); 
-                    expect(review).toHaveProperty('review_id', expect.any(Number)); 
-                    expect(review).toHaveProperty('category', expect.any(String)); 
-                    expect(review).toHaveProperty('review_img_url', expect.any(String)); 
-                    expect(review).toHaveProperty('created_at', expect.any(String)); 
-                    expect(review).toHaveProperty('votes', expect.any(Number)); 
-                    expect(review).toHaveProperty('comment_count'); 
+                    expect(review).toEqual(expect.objectContaining({
+                        owner: expect.any(String),
+                        title: expect.any(String),
+                        designer: expect.any(String),
+                        review_id: expect.any(Number),
+                        category: expect.any(String),
+                        review_img_url: expect.any(String),
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        comment_count: expect.any(String)
+                    }));
                 })
             })
         })
@@ -105,6 +125,63 @@ describe("app", () => {
             })
         })
         })
-
+    describe("GET/api/reviews/:review_id", () => {
+        test("200 status code: request has been succeeded", () => {
+            return request(app)
+            .get("/api/reviews/3")
+            .expect(200)
+        })
+        test("200 status code: responds with an object", () => {
+            return request(app)
+            .get("/api/reviews/2")
+            .expect(200)
+            .then((result) => {
+                reviewObj = result.body
+                expect(reviewObj).toBeInstanceOf(Object)
+            })
+        })
+        test("200 status code: object should have the correct number of key-value pairs", () => {
+            return request(app)
+            .get("/api/reviews/2")
+            .expect(200)
+            .then((result) => {
+                reviewObj = result.body
+                console.log(reviewObj)
+                expect(Object.keys(reviewObj)).toHaveLength(9)
+            })
+        })        
+        test("200 status code: resolves with a single review object with the correct keys", () => {
+            return request(app)
+            .get("/api/reviews/1")
+            .expect(200)
+            .then((result) => {
+                reviewObj = result.body
+                expect(reviewObj).toEqual({
+                    review_id: 1,
+                    title: 'Agricola',
+                    designer: 'Uwe Rosenberg',
+                    owner: 'mallionaire',
+                    review_img_url:
+                      'https://images.pexels.com/photos/974314/pexels-photo-974314.jpeg?w=700&h=700',
+                    review_body: 'Farmyard fun!',
+                    category: 'euro game',
+                    created_at: '2021-01-18T10:00:20.514Z',
+                    votes: 1
+                  })
+            })
+            })
+        test("404 status code: responds with 'review not found' if given a non-existant review_id", () => {
+            return request(app)
+            .get("/api/reviews/545")
+            .expect(404)
+            .then((result) => {
+                response = result.body
+                expect(response.msg).toBe("Review not found")
+                expect(result.status).toBe(404)
+            })
+        })
+        })
     });
 
+
+    
