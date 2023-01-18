@@ -52,7 +52,7 @@ describe("app", () => {
             })
         })
         })
-    describe.only("GET/api/reviews", () => {
+    describe("GET/api/reviews", () => {
 	    test("200 status code: request has been succeeded", () => {
 		    return request(app)
 		    .get("/api/reviews")
@@ -181,7 +181,66 @@ describe("app", () => {
             })
         })
         })
+    describe("GET/api/reviews/:review_id/comments", () => {
+        test("200 status code: request has been succeeded", () => {
+            return request(app)
+            .get("/api/reviews/2/comments")
+            .expect(200)
+        })
+        test("200 status code: should resolve with an array of objects for the given review_id", () => {
+            return request(app)
+            .get("/api/reviews/2/comments")
+            .expect(200)
+            .then((result) => {
+                response = result.body
+                expect(response).toEqual(expect.arrayContaining([expect.objectContaining({})]))
+            })
+        })
+        test("200 status code: the array of comment objects should have the correct length", () => {
+            return request(app)
+            .get("/api/reviews/2/comments")
+            .expect(200)
+            .then((result) => {
+                const response = result.body
+                expect(response).toHaveLength(3)
+            })
+        })
+        test("200 status code: the array of comment objects should have the correct properties", () => {
+            return request(app)
+            .get("/api/reviews/2/comments")
+            .expect(200)
+            .then((result) => {
+                const reviewComments = result.body
+                reviewComments.forEach((review) => {
+                    expect(review).toEqual(expect.objectContaining({
+                        comment_id: expect.any(Number),
+                        author: expect.any(String),
+                        votes: expect.any(Number),
+                        body: expect.any(String),
+                        review_id: expect.any(Number),
+                        created_at: expect.any(String)
+                    }))
+                })
+            })
+        })
+        test("200 status code: the comments should be in order of most recent to least", () => {
+            return request(app)
+            .get("/api/reviews/2/comments")
+            .expect(200)
+            .then((result) => {
+                const reviewComments = result.body
+                expect(reviewComments).toBeSortedBy("created_at", {ascending: true})
+            })
+        })
+        test("404 status code: response with 'No reviews with this Id' when given a non-existent review_id", () => {
+            return request(app)
+            .get("/api/reviews/6019/comments")
+            .expect(404)
+            .then((result) => {
+                const response = result.body
+                expect(response.msg).toBe("No reviews with this Id")
+                expect(result.status).toBe(404) 
+            })
+        })
+    })
     });
-
-
-    
