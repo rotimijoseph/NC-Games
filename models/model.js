@@ -22,10 +22,23 @@ const fetchReviewById = (review_id) => {
     .then(({rows}) => {
         const result = rows[0];
     if (!result) {
-        return Promise.reject({ status: 404, msg: "Review not found"})
+        return Promise.reject({ status: 404, msg: "Non-existant review_id"})
     }
     return result;
 }
 )}
 
-module.exports = { fetchCategories, fetchReviews, fetchReviewById } 
+const fetchCommentsByReviewId = (review_id) => {
+    const queryStr = `SELECT * FROM comments WHERE review_id = $1
+    ORDER BY created_at ASC;`
+    return db.query(queryStr, [review_id])
+    .then(({rows}) => {
+        const result = rows
+        if (!result) {
+            return Promise.reject({ status: 404, msg: "Non-existant review_id"}
+            )}
+            return result;
+    })
+}
+
+module.exports = { fetchCategories, fetchReviews, fetchReviewById, fetchCommentsByReviewId } 
