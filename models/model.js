@@ -22,7 +22,7 @@ const fetchReviewById = (review_id) => {
     .then(({rows}) => {
         const result = rows[0];
     if (!result) {
-        return Promise.reject({ status: 404, msg: "Review not found"})
+        return Promise.reject({ status: 404, msg: "Non-existant review_id"})
     }
     return result;
 }
@@ -34,10 +34,10 @@ const fetchCommentsByReviewId = (review_id) => {
     return db.query(queryStr, [review_id])
     .then(({rows}) => {
         const result = rows
-    if (result.length === 0) {
-            return Promise.reject({ status: 404, msg: "No reviews with this Id"})
-        }
-        return result;
+        if (!result) {
+            return Promise.reject({ status: 404, msg: "Non-existant review_id"}
+            )}
+            return result;
     })
 }
 

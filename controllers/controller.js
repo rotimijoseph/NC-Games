@@ -23,12 +23,16 @@ const getReviewById = (request, response, next) => {
 
 const getCommentsByReviewId = (request, response, next) => {
     const { review_id } = request.params;
+    
     fetchCommentsByReviewId(review_id).then((comments) => {
-        response.status(200).send(comments)
+        Promise.all([fetchReviewById(review_id), fetchCommentsByReviewId(review_id)]).then((result1) => {
+            response.status(200).send(comments)
+        })
+        .catch(next)
     })
-    .catch(next)
 }
 
+// .catch(next)
 
 
 module.exports = { getCategories, getReviews, getReviewById, getCommentsByReviewId }

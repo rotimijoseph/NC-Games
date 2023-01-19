@@ -125,7 +125,7 @@ describe("app", () => {
             })
         })
         })
-    describe("GET/api/reviews/:review_id", () => {
+    describe.only("GET/api/reviews/:review_id", () => {
         test("200 status code: request has been succeeded", () => {
             return request(app)
             .get("/api/reviews/3")
@@ -146,7 +146,6 @@ describe("app", () => {
             .expect(200)
             .then((result) => {
                 reviewObj = result.body
-                console.log(reviewObj)
                 expect(Object.keys(reviewObj)).toHaveLength(9)
             })
         })        
@@ -170,18 +169,18 @@ describe("app", () => {
                   })
             })
             })
-        test("404 status code: responds with 'review not found' if given a non-existant review_id", () => {
+        test("404 status code: responds with 'Non-existant review_id' if given a non-existant review_id", () => {
             return request(app)
             .get("/api/reviews/545")
             .expect(404)
             .then((result) => {
                 response = result.body
-                expect(response.msg).toBe("Review not found")
+                expect(response.msg).toBe("Non-existant review_id")
                 expect(result.status).toBe(404)
             })
         })
         })
-    describe("GET/api/reviews/:review_id/comments", () => {
+    describe.only("GET/api/reviews/:review_id/comments", () => {
         test("200 status code: request has been succeeded", () => {
             return request(app)
             .get("/api/reviews/2/comments")
@@ -192,7 +191,7 @@ describe("app", () => {
             .get("/api/reviews/2/comments")
             .expect(200)
             .then((result) => {
-                response = result.body
+                const response = result.body
                 expect(response).toEqual(expect.arrayContaining([expect.objectContaining({})]))
             })
         })
@@ -232,13 +231,21 @@ describe("app", () => {
                 expect(reviewComments).toBeSortedBy("created_at", {ascending: true})
             })
         })
-        test("404 status code: response with 'No reviews with this Id' when given a non-existent review_id", () => {
+        test("200 status code: resolves with an empty array if the review_id exists but no comments are present", () => {
+            return request(app)
+            .get("/api/reviews/5/comments")
+            .expect(200)
+            .then((result) => {
+                const reviewWithoutComment = result.body
+                expect(reviewWithoutComment).toEqual([])
+            })
+        })
+        test("404 status code: responds with 'Non-existant review_id' when given a non-existent review_id", () => {
             return request(app)
             .get("/api/reviews/6019/comments")
             .expect(404)
             .then((result) => {
-                const response = result.body
-                expect(response.msg).toBe("No reviews with this Id")
+                expect(response.msg).toBe("Non-existant review_id")
                 expect(result.status).toBe(404) 
             })
         })
