@@ -125,7 +125,7 @@ describe("app", () => {
             })
         })
         })
-    describe.only("GET/api/reviews/:review_id", () => {
+    describe("GET/api/reviews/:review_id", () => {
         test("200 status code: request has been succeeded", () => {
             return request(app)
             .get("/api/reviews/3")
@@ -180,7 +180,7 @@ describe("app", () => {
             })
         })
         })
-    describe.only("GET/api/reviews/:review_id/comments", () => {
+    describe("GET/api/reviews/:review_id/comments", () => {
         test("200 status code: request has been succeeded", () => {
             return request(app)
             .get("/api/reviews/2/comments")
@@ -250,4 +250,38 @@ describe("app", () => {
             })
         })
     })
+    describe("POST/api/reviews/:review_id/comments", () => {
+        test("201 status code: request has been successed and a new resource has been created", () =>{
+            return request(app)
+            .post("/api/reviews/2/comments")
+            .send({ username: "bainesface", body: "This is amazing!" })
+            .expect(201)
+        })
+        test("201 status code: should resolve with an array containing the comment object", () => {
+            return request(app)
+            .post("/api/reviews/2/comments")
+            .send({ username: "bainesface", body: "This is amazing!" })
+            .expect(201)
+            .then((result) => {
+                newResponse = result.body
+                expect(newResponse).toEqual(expect.arrayContaining([expect.objectContaining({})]))
+            })
+        })
+        test("201 status code: object recieved has the correct key-value pairs", () => {
+            return request(app)
+            .post("/api/reviews/2/comments")
+            .send({ username: "bainesface", body: "This is amazing!" })
+            .expect(201)
+            .then((result) => {
+                const newComment = result.body 
+                expect(newComment).toEqual(expect.arrayContaining([expect.objectContaining({
+                    comment_id: expect.any(Number),
+                    author: expect.any(String),
+                    body: expect.any(String),
+                    review_id: expect.any(Number),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number) })]))
+            })
+        })
     });
+})
