@@ -66,5 +66,11 @@ const changeReview = (review_id, {inc_votes}) => {
     })
     }
     
+const fetchUsers = () => {
+    queryStr = `SELECT * FROM users;`
 
-module.exports = { fetchCategories, fetchReviews, fetchReviewById, fetchCommentsByReviewId, addComment, changeReview } 
+    return db.query(queryStr).then((result) => result.rows)
+    }
+
+
+module.exports = { fetchCategories, fetchReviews, fetchReviewById, fetchCommentsByReviewId, addComment, changeReview, fetchUsers } 
