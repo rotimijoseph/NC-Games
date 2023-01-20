@@ -345,4 +345,56 @@ describe("app", () => {
             })
         })
     })
+    describe.only("GET/api/users", () => {
+        test("200 status code: request has been succeeded", () => {
+            return request(app)
+            .get("/api/users")
+            .expect(200)
+        })
+        test("200 status code: should resolve with an array of objects", () => {
+            return request(app)
+            .get("/api/users")
+            .expect(200)
+            .then((result) => {
+                const arrayOfObj = result.body
+                expect(arrayOfObj).toEqual(expect.arrayContaining([expect.objectContaining({})]))
+            })
+        })
+        test("200 status code: array of objects created with correct keys", () => {
+            return request(app)
+            .get("/api/users")
+            .expect(200)
+            .then((result) => {
+                const reviews = result.body
+                reviews.forEach((review) => {
+                    expect(review).toEqual(expect.objectContaining({
+                        username: expect.any(String),
+                        name: expect.any(String),
+                        avatar_url: expect.any(String)
+                    }))
+                })
+            })
+        })
+        test("200 status code: should have the correct length", () => {
+            return request(app)
+            .get("/api/users")
+            .expect(200)
+            .then((result) => {
+                const allUsers = result.body
+                expect(allUsers).toHaveLength(4)
+            })
+        })
+        test("404 status code: path was not found", () => {
+            return request(app)
+            .get("/not-a-path")
+            .expect(404)
+            .then((result) => {
+                const response = result.body
+                console.log(response)
+                expect(result.status).toBe(404)
+                expect(response.msg).toBe("Path not found")
+            })
+        })
+    })
+    
 })
