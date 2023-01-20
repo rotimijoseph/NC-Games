@@ -284,4 +284,65 @@ describe("app", () => {
             })
         })
     });
+    describe("PATCH/api/reviews/:review_id", () => {
+        test("200 status code: request has been successed", () => {
+            return request(app)
+            .patch("/api/reviews/3")
+            .send({ inc_votes: 4 })
+            .expect(200)
+        })
+        test("200 status code: review object has been successfully updated and contains the correct key-value pairs", () => {
+            return request(app)
+            .patch("/api/reviews/3")
+            .send({ inc_votes: 4 })
+            .expect(200)
+            .then((result) => {
+                const updatedObj = result.body
+                expect(updatedObj).toEqual(expect.objectContaining({
+                    title: expect.any(String),
+                    designer: expect.any(String),
+                    owner: expect.any(String),
+                    review_img_url:
+                    expect.any(String),
+                    review_body: expect.any(String),
+                    category: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    review_id: expect.any(Number)
+                }))
+            })
+        })
+        test("200 status code: the vote property has been updated by the right number", () => {
+            return request(app)
+            .patch("/api/reviews/3")
+            .send({ inc_votes: 4 })
+            .expect(200)
+            .then((result) => {
+                const updatedObj = result.body 
+                expect(updatedObj).toEqual({
+                    review_id: 3,
+                    title: 'Ultimate Werewolf',
+                    designer: 'Akihisa Okui',
+                    owner: 'bainesface',
+                    review_img_url:
+                    'https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?w=700&h=700',
+                    review_body: "We couldn't find the werewolf!",
+                    category: 'social deduction',
+                    created_at: '2021-01-18T10:01:41.251Z',
+                    votes: 9
+                })
+            })
+        })
+        test("404 status code: review_id not found", () => {
+            return request(app)
+            .patch("/api/reviews/30928")
+            .send({ inc_votes: 4 })
+            .expect(404)
+            .then((result) => {
+                const response = result.body
+                expect(response.msg).toBe("Non-existant review_id")
+                expect(result.status).toBe(404) 
+            })
+        })
+    })
 })
