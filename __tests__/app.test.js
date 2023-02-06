@@ -345,7 +345,7 @@ describe("app", () => {
             })
         })
     })
-    describe.only("GET/api/users", () => {
+    describe("GET/api/users", () => {
         test("200 status code: request has been succeeded", () => {
             return request(app)
             .get("/api/users")
@@ -390,10 +390,16 @@ describe("app", () => {
             .expect(404)
             .then((result) => {
                 const response = result.body
-                console.log(response)
                 expect(result.status).toBe(404)
                 expect(response.msg).toBe("Path not found")
             })
+        })
+    })
+    describe("GET/api/reviews/query", () => {
+        test("200 status code: request has been succeeded", () => {
+            return request(app)
+            .get("/api/reviews?category")
+            .expect(200)
         })
     })
     

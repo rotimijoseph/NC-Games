@@ -1,7 +1,9 @@
 const express = require("express");
 const app = express(); 
-const { getCategories, getReviews, getReviewById, getCommentsByReviewId, postComments, updateReview, getUsers } = require("../controllers/controller")
+const { getCategories, getReviews, getReviewById, getCommentsByReviewId, postComments, updateReview, getUsers } = require("../controllers/controller");
+const cors = require('cors');
 
+app.use(cors());
 app.use(express.json());
 
 app.get('/api/categories', getCategories);
@@ -17,6 +19,12 @@ app.post('/api/reviews/:review_id/comments', postComments);
 app.patch('/api/reviews/:review_id', updateReview);
 
 app.get('/api/users', getUsers)
+
+app.get('/api/reviews', (request, response) => {
+    response.status(200).send({msg: "All good in the hood"})
+})
+
+
 
 app.use((request, response, next) => {
     response.status(404).send({ msg: "Path not found"})
