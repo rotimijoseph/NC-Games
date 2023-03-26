@@ -2,18 +2,18 @@
 
 ## Summary
 
-This API allows users to view, create and update reviews, comments and users on various types of games. All available endpoints are available for users to view.
+This API allows users to view, create and update reviews, comments and users on various types of games. All available endpoints are available for users to view, and listed below.
 
 ## Getting Started
 
 If you wish to clone this project and run it locally, in order to successfully connect to the two databases you will need to add two .env files (.env.test, .env.development), one for the test data and another for the dev data.
 
-Install all dependancies by running the command 'npm install'
-To run tests, use the command 'npm test'
+- Install all dependancies by running the command 'npm install'
+- To run tests, use the command 'npm test'
 
 ## Minimum Versions
 
-In order to use this API, the minimum version of Node.js required is v19.1.0, and v8.7.3 for Postgres
+In order to use this API, the minimum version required for Node.js is v19.1.0, and v8.7.3 for Postgres
 
 ## Links
 
