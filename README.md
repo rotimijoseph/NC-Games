@@ -23,10 +23,10 @@ https://dizzy-whizzy-nc-games.onrender.com/api/reviews
 
 Listed below are all the available endpoints:
 
-GET /api/categories
-GET /api/reviews
-GET /api/reviews/:review_id
-GET /api/reviews/:review_id/comments
-GET /api/users
-POST /api/reviews/:review_id/comments
-PATCH /api/reviews/:review_id
+*GET /api/categories
+*GET /api/reviews
+*GET /api/reviews/:review_id
+*GET /api/reviews/:review_id/comments
+*GET /api/users
+*POST /api/reviews/:review_id/comments
+\*PATCH /api/reviews/:review_id
