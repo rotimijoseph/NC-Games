@@ -9,6 +9,7 @@ This API allows users to view, create and update reviews, comments and users on 
 If you wish to clone this project and run it locally, in order to successfully connect to the two databases you will need to add two .env files (.env.test, .env.development), one for the test data and another for the dev data.
 
 Install all dependancies by running the command 'npm install'
+To run tests, use the command 'npm test'
 
 ## Minimum Versions
 
