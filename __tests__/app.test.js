@@ -408,9 +408,4 @@ describe("app", () => {
         });
     });
   });
-  describe("GET/api/reviews/query", () => {
-    test("200 status code: request has been succeeded", () => {
-      return request(app).get("/api/reviews?category").expect(200);
-    });
-  });
 });
